@@ -1,6 +1,15 @@
 version: '3.5'
 
 services:
+  front:
+    build:
+      context: ./website-demo
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    networks:
+      - backend
+
   router:
     image: "israelhikingmap/graphhopper"
     hostname: "graphhopper"
