@@ -3,3 +3,6 @@ run:
 
 stop:
 	docker-compose down
+
+exec-api:
+	docker-compose exec api bash

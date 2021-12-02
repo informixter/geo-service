@@ -18,15 +18,15 @@ services:
     volumes:
       - ./tmp/pgdata:/data/postgres:rw
       - ./tmp/backup:/backup_data:rw
-  snapserver:
-    build: 
-      context: "server"
-      dockerfile: "Dockerfile"
-    ports:
-      - 8080:3000
-    networks:
-      - backend
-    restart: always
+#  snapserver:
+#    build:
+#      context: "server"
+#      dockerfile: "Dockerfile"
+#    ports:
+#      - 8080:3000
+#    networks:
+#      - backend
+#    restart: always
   api:
     command:
       - /usr/local/bin/php
