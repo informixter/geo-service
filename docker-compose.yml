@@ -38,12 +38,12 @@ services:
       - backend
     restart: always
   api:
-    command:
-      - /usr/local/bin/php
-      - /app/artisan
-      - serve
-      - --port=8080
-      - --host=0.0.0.0
+#    command:
+#      - /usr/local/bin/php
+#      - /app/artisan
+#      - serve
+#      - --port=8080
+#      - --host=0.0.0.0
     environment:
       APP_KEY: "base64:Z/MMQc23MXBrfMVDZ+1Bwm+1uO6r/v5RtKS7R1Ctai0="
       APP_NAME: "Laravel"
