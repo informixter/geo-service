@@ -16,7 +16,7 @@ class RoutesController extends Controller
      */
     public function index()
     {
-        $listing = Routes::all()->map(function ($item){
+        $listing = Routes::all()->map(function ($item) {
             return json_decode($item['data'], true);
         });
         return response()->json($listing->toArray());
@@ -30,7 +30,7 @@ class RoutesController extends Controller
     public function create(Request $request)
     {
         $route = Routes::find($request->get('id'));
-        if (is_null($route)){
+        if (is_null($route)) {
             $route = new Routes();
         }
 
@@ -87,6 +87,9 @@ class RoutesController extends Controller
         $id = $request->route('id');
         $route = Routes::find($id);
         $data = json_decode($route->data, true);
+//        foreach ($request->all() as $row) {
+//            $data['points'][] = $row;
+//        }
         $data['points'][] = $request->all();
         $route->data = json_encode($data);
         $route->save();

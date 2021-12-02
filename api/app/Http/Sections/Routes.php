@@ -58,21 +58,36 @@ class Routes extends Section implements Initializable
     {
         $columns = [
             AdminColumn::text('id', '#')->setWidth('50px')->setHtmlAttribute('class', 'text-center'),
-            AdminColumn::link('name', 'Name', 'created_at')
-                ->setSearchCallback(function($column, $query, $search){
+            AdminColumn::link('name', 'Название маршрута', 'created_at')
+                ->setSearchCallback(function ($column, $query, $search) {
                     return $query
-                        ->orWhere('name', 'like', '%'.$search.'%')
-                        ->orWhere('created_at', 'like', '%'.$search.'%')
-                    ;
+                        ->orWhere('name', 'like', '%' . $search . '%')
+                        ->orWhere('created_at', 'like', '%' . $search . '%');
                 })
-                ->setOrderable(function($query, $direction) {
+                ->setOrderable(function ($query, $direction) {
                     $query->orderBy('created_at', $direction);
                 })
             ,
-            AdminColumn::text('data', 'json'),
+//            AdminColumn::text('data', 'json'),
+            AdminColumn::custom('кол-во точек', function (\App\Models\Routes $routes) {
+                $d = json_decode($routes->data, true);
+                if (isset($d['points'])) {
+                    $html = "";
+                    foreach ($d['points'] as $row) {
+//                        "latitude": 0.11, "longitude"
+//                        $html .= $row['coords']['latitude'] . "," . $row['coords']['longitude'];
+                        $html.=json_encode($row)."<br>";
+                    }
+//                    return json_encode($d['points']);
+                    return $html;
+                }
+
+                return 0;
+
+            }),
             AdminColumn::text('created_at', 'Created / updated', 'updated_at')
                 ->setWidth('160px')
-                ->setOrderable(function($query, $direction) {
+                ->setOrderable(function ($query, $direction) {
                     $query->orderBy('updated_at', $direction);
                 })
                 ->setSearchable(false)
@@ -85,13 +100,12 @@ class Routes extends Section implements Initializable
             ->setDisplaySearch(true)
             ->paginate(25)
             ->setColumns($columns)
-            ->setHtmlAttribute('class', 'table-primary table-hover th-center')
-        ;
+            ->setHtmlAttribute('class', 'table-primary table-hover th-center');
 
         $display->setColumnFilters([
             AdminColumnFilter::select()
                 ->setModelForOptions(\App\Models\Routes::class, 'name')
-                ->setLoadOptionsQueryPreparer(function($element, $query) {
+                ->setLoadOptionsQueryPreparer(function ($element, $query) {
                     return $query;
                 })
                 ->setDisplay('name')
@@ -117,23 +131,17 @@ class Routes extends Section implements Initializable
                 AdminFormElement::text('name', 'Name')
                     ->required()
                 ,
-                AdminFormElement::html('<hr>'),
-                AdminFormElement::datetime('created_at')
-                    ->setVisible(true)
-                    ->setReadonly(false)
-                ,
-                AdminFormElement::html('last AdminFormElement without comma')
-            ], 'col-xs-12 col-sm-6 col-md-4 col-lg-4')->addColumn([
                 AdminFormElement::text('id', 'ID')->setReadonly(true),
-                AdminFormElement::html('last AdminFormElement without comma')
-            ], 'col-xs-12 col-sm-6 col-md-8 col-lg-8'),
+                AdminFormElement::html('<hr>'),
+                AdminFormElement::textarea('data', 'json')
+            ], 'col-xs-12 col-sm-12 col-md-12 col-lg-12'),
         ]);
 
         $form->getButtons()->setButtons([
-            'save'  => new Save(),
-            'save_and_close'  => new SaveAndClose(),
-            'save_and_create'  => new SaveAndCreate(),
-            'cancel'  => (new Cancel()),
+            'save' => new Save(),
+            'save_and_close' => new SaveAndClose(),
+            'save_and_create' => new SaveAndCreate(),
+            'cancel' => (new Cancel()),
         ]);
 
         return $form;

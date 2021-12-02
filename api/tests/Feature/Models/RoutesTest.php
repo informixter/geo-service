@@ -9,7 +9,7 @@ use Tests\TestCase;
 
 class RoutesTest extends TestCase
 {
-    use DatabaseTransactions;
+//    use DatabaseTransactions;
     /**
      * A basic feature test example.
      *
@@ -50,7 +50,7 @@ class RoutesTest extends TestCase
         $response = $this->getJson('/api/routes');
         $response->assertStatus(200);
 
-        $points = $postData['points'];
+        $points = json_decode('{"coords": {"speed": 0.6, "accuracy": 0.5, "latitude": 0.2, "longitude": 0.4}, "timestamp": 12344}', true);
         $points['coords']['latitude'] = 0.11;
         $points['coords']['longitude'] = 0.12;
         $this->postJson('/api/routes/'.$postData['id'], $points)->status(200);
