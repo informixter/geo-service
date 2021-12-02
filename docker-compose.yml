@@ -1,6 +1,15 @@
 version: '3.5'
 
 services:
+  router:
+    image: "israelhikingmap/graphhopper"
+    hostname: "graphhopper"
+    volumes:
+      - "./maps:/data/"
+      - "./config:/graphhopper/config"
+    entrypoint: /bin/bash -c "java -Ddw.graphhopper.datareader.file=/data/volga-fed-district-latest.osm.pbf -Ddw.server.application_connectors[0].bind_host=0.0.0.0 -Ddw.graphhopper.graph.location=ufa-gh -jar *.jar server /graphhopper/config/config-example.yml"
+    networks:
+      - backend
   postgres:
     environment:
       PGDATA: /data/postgres
