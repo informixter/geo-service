@@ -16,9 +16,19 @@
     "assetBundlePatterns": [
       "**/*"
     ],
-    "ios": {
-      "supportsTablet": true
-    },
+	  "ios": {
+		  "config": {
+			  "googleMapsApiKey": "AIzaSyDwTcsTzBr70frhBYE4eUjK0ux-tJ6LbjU"
+		  },
+		  "bundleIdentifier": "geoapptest.io",
+		  "supportsTablet": true,
+		  "infoPlist": {
+			  "UIBackgroundModes": [
+				  "location",
+				  "fetch"
+			  ]
+		  }
+	  },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
