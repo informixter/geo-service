@@ -1,7 +1,24 @@
 version: '3.5'
 
 services:
-  api:
+  postgres:
+    environment:
+      PGDATA: /data/postgres
+      POSTGRES_DB: demo
+      POSTGRES_PASSWORD: demo
+      POSTGRES_USER: demo
+    hostname: postgres
+    image: library/postgres:11-alpine
+    networks:
+      backend: null
+    ports:
+      - published: 5432
+        target: 5432
+    restart: unless-stopped
+    volumes:
+      - ./tmp/pgdata:/data/postgres:rw
+      - ./tmp/backup:/backup_data:rw
+  snapserver:
     build: 
       context: "server"
       dockerfile: "Dockerfile"

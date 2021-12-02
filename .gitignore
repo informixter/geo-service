@@ -1,2 +1,4 @@
-maps
-server/node_modules
+/maps/
+/server/node_modules/
+/.idea/
+/tmp/
