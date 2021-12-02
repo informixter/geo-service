@@ -9,7 +9,21 @@ services:
       - "80:80"
     networks:
       - backend
-
+  jupyter:
+    hostname: jupyter
+    build:
+      context: jupyter
+      dockerfile: Dockerfile
+    environment:
+      db: "postgresql://demo:demo@postgres/demo"
+    ports:
+      - "8888:8888"
+    restart: unless-stopped
+    volumes:
+      - ./jupyter/notebooks:/notebooks
+    command: [ "jupyter", "notebook", "--port=8888", "--no-browser", "--ip=0.0.0.0", "--allow-root" ,"--NotebookApp.token='d518261697c2b170d3f96d022da7ac777d3f919f514f3bf4'" , "--NotebookApp.base_url='/'" ]
+    networks:
+      - backend
   router:
     image: "israelhikingmap/graphhopper"
     hostname: "graphhopper"

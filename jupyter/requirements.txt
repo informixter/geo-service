@@ -1,0 +1,17 @@
+xlrd
+jupyter
+openpyxl
+asyncio
+aiohttp
+sqlalchemy
+papermill
+requests
+boto3
+psycopg2-binary
+pandas
+numpy
+loguru
+xlsxwriter
+geopandas
+scikit-learn
+matplotlib
