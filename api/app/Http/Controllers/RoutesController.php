@@ -29,11 +29,12 @@ class RoutesController extends Controller
      */
     public function create(Request $request)
     {
-        $route = new Routes();
-        if ($request->has('id')) {
-            $route = Routes::find($request->get('id'));
+        $route = Routes::find($request->get('id'));
+        if (is_null($route)){
+            $route = new Routes();
         }
 
+        $route->id = $request->get('id');
         $route->name = $request->get('name');
         $route->data = json_encode($request->all());
         $route->save();
@@ -87,7 +88,7 @@ class RoutesController extends Controller
         $route = Routes::find($id);
         $data = json_decode($route->data, true);
         $data['points'][] = $request->all();
-        $route->data = $data;
+        $route->data = json_encode($data);
         $route->save();
         return $data;
     }

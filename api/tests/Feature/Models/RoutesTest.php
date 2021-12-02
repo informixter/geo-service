@@ -19,6 +19,7 @@ class RoutesTest extends TestCase
     {
         $str = '
         {
+            "id": '.mt_rand(1,9999999).',
             "name": "demotest",
             "color": "",
             "points": [
@@ -38,10 +39,10 @@ class RoutesTest extends TestCase
 
         $response = $this->postJson('/api/routes', $postData);
         $response->assertStatus(200);
-        $this->assertDatabaseHas('routes', ['name'=>$postData['name']]);
+        $this->assertDatabaseHas('routes', ['name'=>$postData['name'], 'id' => $postData['id']]);
 
         $postData['name'] = "22";
-        $postData['id'] = $response->decodeResponseJson()->json('id');
+//        $postData['id'] = $response->decodeResponseJson()->json('id');
         $response = $this->postJson('/api/routes', $postData);
         $response->assertStatus(200);
         $this->assertDatabaseHas('routes', ['name'=>$postData['name'], 'id'=>$postData['id']]);
