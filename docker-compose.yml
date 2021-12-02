@@ -18,22 +18,23 @@ services:
     volumes:
       - ./tmp/pgdata:/data/postgres:rw
       - ./tmp/backup:/backup_data:rw
-#  snapserver:
-#    build:
-#      context: "server"
-#      dockerfile: "Dockerfile"
-#    ports:
-#      - 8080:3000
-#    networks:
-#      - backend
-#    restart: always
+  snapserver:
+    hostname: "snapserver"
+    build:
+      context: "server"
+      dockerfile: "Dockerfile"
+    ports:
+      - 3000:3000
+    networks:
+      - backend
+    restart: always
   api:
-    command:
-      - /usr/local/bin/php
-      - /app/artisan
-      - serve
-      - --port=8080
-      - --host=0.0.0.0
+#    command:
+#      - /usr/local/bin/php
+#      - /app/artisan
+#      - serve
+#      - --port=8080
+#      - --host=0.0.0.0
     environment:
       APP_KEY: "base64:Z/MMQc23MXBrfMVDZ+1Bwm+1uO6r/v5RtKS7R1Ctai0="
       APP_NAME: "Laravel"
@@ -74,6 +75,7 @@ services:
       PUSHER_APP_KEY: ""
       PUSHER_APP_SECRET: ""
       PUSHER_APP_CLUSTER: "mt1"
+      SNAP_SERVER: "snapserver"
     build:
       dockerfile: Dockerfile
       context: ./api
