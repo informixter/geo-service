@@ -1,7 +1,7 @@
 FROM node:16-alpine as builder
 WORKDIR /app
 COPY package.json ./
-RUN npm i && npx browserslist --update-db
+RUN npm i
 COPY . .
 ARG ENVIRONMENT=prod
 

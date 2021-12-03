@@ -1,5 +1,8 @@
 CURR_DATE := `date +%Y-%m-%d\ %H:%M`
 
+build:
+	docker-compose build
+
 run:
 	docker-compose up -d
 
