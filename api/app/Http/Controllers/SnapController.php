@@ -97,11 +97,20 @@ class SnapController extends Controller
         return response()->json($res);
     }
 
+    /**
+     * получение схожих маршрутов по явно переданным координатам
+     *
+     * @param Request $request
+     * @return JsonResponse
+     * @throws GuzzleException
+     */
     public function similar_coord(Request $request){
         $end_point = env('SIMILAR_SERVER', "http://calc:5000");
         $client = new Client();
         $n_cl = 15;
-        $response = $client->post($end_point . "/similar_coords?n_cl=" . $n_cl, $request->all());
+        $response = $client->post($end_point . "/similar_coords?n_cl=" . $n_cl, [
+            RequestOptions::JSON => $request->all()
+        ]);
         $res = json_decode($response->getBody()->getContents(), true);
         return response()->json($res);
     }
