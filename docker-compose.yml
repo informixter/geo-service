@@ -9,6 +9,19 @@ services:
       - "80:80"
     networks:
       - backend
+  calc:
+    hostname: calc
+    build:
+      context: jupyter
+      dockerfile: DockerfileService
+    environment:
+      db: "postgresql://demo:demo@postgres/demo"
+    ports:
+      - "5001:5000"
+    restart: unless-stopped
+    command: [ "flask", "run", "--host=0.0.0.0"]
+    networks:
+      - backend
   jupyter:
     hostname: jupyter
     build:

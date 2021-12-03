@@ -11,6 +11,9 @@ git-commit:
 	git commit -m "Fast commit at : $(CURR_DATE)"
 	git push origin main
 
+deploy-calc: git-commit
+	ssh -t root@159.69.178.233 'cd router && git pull origin main && docker-compose stop calc && docker-compose build calc && docker-compose up -d calc'
+
 deploy-jupyter: git-commit
 	ssh -t root@159.69.178.233 'cd router && git pull origin main && docker-compose stop jupyter && docker-compose build jupyter && docker-compose up -d jupyter'
 
