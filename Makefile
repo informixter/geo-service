@@ -33,4 +33,5 @@ deploy-api: git-commit
 	ssh -t root@159.69.178.233 'cd router && git pull origin main && docker-compose stop api && docker-compose build api && docker-compose up -d api'
 
 get_maps:
+	mkdir -p maps
 	wget https://download.geofabrik.de/russia/volga-fed-district-latest.osm.pbf -O ./maps/volga-fed-district-latest.osm.pbf
