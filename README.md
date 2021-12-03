@@ -62,7 +62,7 @@ make run
 
 Остановить систему.
 ```shell
-make run
+make stop
 ```
 
 РАЗРАБОТЧИКИ
