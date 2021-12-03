@@ -275,7 +275,11 @@ function App() {
 					<Polyline options={{strokeColor: snappedRoute.color || '#000'}} path={snappedRoute.points.map(point => ({lat: point.coords.latitude, lng: point.coords.longitude}))}/>
 				}
 
-				{points.map((point, index, points) => <Marker label={moment(point.timestamp).format("DD HH:mm:ss") && ""}
+				{/*{(snappedRoute?.points || []).map((point, index, points) => <Marker label={moment(point.timestamp).format("HH:mm:ss") && ""}
+				                                              position={{lat: point.coords.latitude, lng: point.coords.longitude}}/>)}*/}
+
+
+				{points.map((point, index, points) => <Marker label={moment(point.timestamp).format("HH:mm:ss") && ""}
 				                                              position={{lat: point.coords.latitude, lng: point.coords.longitude}}/>)}
 			</GoogleMap>
 
