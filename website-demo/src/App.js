@@ -121,7 +121,7 @@ function App() {
 		 */
 		const response = await fetch(`${API_PATH}/api/similar_coord`, {headers: {'Content-Type' : 'application/json'}, method: "POST", body: JSON.stringify([{lat: latitude, lon: longitude}])})
 		const data = await response.json();
-		const nearCluster = data.find(cluster => cluster.score > 0.7);
+		const nearCluster = data.find(cluster => cluster.score > 0.8);
 		if (nearCluster === undefined )
 		{
 			addToast('Нет предыдущих маршрутов в округе. Замер раз в 2 минуты', { appearance: 'info' })
