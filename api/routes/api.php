@@ -28,4 +28,5 @@ Route::post('/routes/{id}', [RoutesController::class, 'update']);
 
 Route::post('/snap', [SnapController::class, 'snap']);
 Route::post('/snap_batch', [SnapController::class, 'snap_batch']);
+Route::get('/similar/{id}', [SnapController::class, 'similar']);
 

@@ -121,6 +121,7 @@ services:
       PUSHER_APP_SECRET: ""
       PUSHER_APP_CLUSTER: "mt1"
       SNAP_SERVER: "http://snapserver:3000"
+      SIMILAR_SERVER: "http://calc:5000"
     build:
       dockerfile: Dockerfile
       context: ./api
