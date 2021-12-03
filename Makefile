@@ -3,6 +3,7 @@ CURR_DATE := `date +%Y-%m-%d\ %H:%M`
 init: get_maps
 	docker-compose build
 	docker-compose up -d api postgres
+	sleep 7
 	docker-compose exec api bash -c "php artisan migrate --seed && php artisan map:reseter"
 	docker-compose down
 
@@ -34,4 +35,5 @@ deploy-api: git-commit
 
 get_maps:
 	mkdir -p maps
-	wget https://download.geofabrik.de/russia/volga-fed-district-latest.osm.pbf -O ./maps/volga-fed-district-latest.osm.pbf
+	wget https://59830.selcdn.ru/cdn/volga-fed-district-latest.osm.pbf -O ./maps/volga-fed-district-latest.osm.pbf
+	#wget https://download.geofabrik.de/russia/volga-fed-district-latest.osm.pbf -O ./maps/volga-fed-district-latest.osm.pbf
