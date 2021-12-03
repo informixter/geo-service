@@ -1,7 +1,10 @@
 CURR_DATE := `date +%Y-%m-%d\ %H:%M`
 
-build:
+init: get_maps
 	docker-compose build
+	docker-compose up -d api postgres
+	docker-compose exec api bash -c "php artisan migrate --seed"
+	docker-compose down
 
 run:
 	docker-compose up -d
