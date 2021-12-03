@@ -40,4 +40,4 @@ ADD . /app
 
 RUN composer install
 RUN chmod -R 0777 /app/storage/logs
-RUN wget https://59830.selcdn.ru/cdn/exp2.csv -O /app/storage/app/
+RUN wget https://59830.selcdn.ru/cdn/exp2.csv -O /app/storage/app/exp2.csv
