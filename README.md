@@ -60,6 +60,7 @@ make build
 make run_local
 ```
 
+
 РАЗРАБОТЧИКИ
 <h4>Туктарова Алина - Дизайн, презентация, данные</h4>
 <h4>Бережнов Дмитрий - fullstack https://t.me/berezh </h4>
