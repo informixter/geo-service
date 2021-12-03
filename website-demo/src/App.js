@@ -35,9 +35,9 @@ function App() {
 	{
 		(async () =>
 		{
-			const response = await fetch('https://api.smartarget.online/geo/data');
+			const response = await fetch('http://159.69.178.233:8080/api/routes');
 			const data = await response.json();
-			let paths = data.data.sort((a, b) => a.name > b.name ? 1 : -1);
+			let paths = data.sort((a, b) => a.name > b.name ? 1 : -1).filter(route => route.name.match('маршрут'));
 
 			setData(paths);
 
@@ -56,14 +56,6 @@ function App() {
 		})();
 
 	}, []);
-
-	/**
-	 * Сохранение роутов на сервере
-	 */
-	function saveRoutes ()
-	{
-
-	}
 
 	/**
 	 * Обработка кликов на карту при построении маргрута вручную
