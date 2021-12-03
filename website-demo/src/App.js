@@ -88,7 +88,7 @@ function App() {
 	 */
 	async function onClick (e)
 	{
-		if (!selectedRoute)
+		if (!selectedRoute || !manualMode)
 		{
 			return;
 		}
