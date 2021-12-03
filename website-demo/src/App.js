@@ -6,6 +6,8 @@ import {mapStyles, snap} from "./helper";
 import * as moment from "moment";
 import { useToasts } from 'react-toast-notifications';
 
+const API_PATH = process.env.REACT_APP_GEO_PATH || 'http://159.69.178.233:8080';
+
 function App() {
 	const { isLoaded } = useJsApiLoader({id: 'google-map-script', googleMapsApiKey: "AIzaSyB0RQ7Buz5dpvv51Z8M8x1BS4KipinEojo"})
 
@@ -41,7 +43,7 @@ function App() {
 	{
 		(async () =>
 		{
-			const response = await fetch('http://159.69.178.233:8080/api/routes');
+			const response = await fetch(`${API_PATH}/api/routes`);
 			const data = await response.json();
 
 			/**
@@ -74,7 +76,7 @@ function App() {
 	{
 		(async () =>
 		{
-			const response = await fetch('http://159.69.178.233:8080/api/similar_center');
+			const response = await fetch(`${API_PATH}/api/similar_center`);
 			const data = await response.json();
 			setClusters(data);
 		})();
@@ -117,7 +119,7 @@ function App() {
 		/**
 		 * АНАЛИЗ НОВОЙ ТОЧКИ НА БЛИЗОСТЬ К КЛАСТЕРАМ (ПРЕДЫДУЩИМ МАРШРУТАМ)
 		 */
-		const response = await fetch('http://159.69.178.233:8080/api/similar_coord', {headers: {'Content-Type' : 'application/json'}, method: "POST", body: JSON.stringify([{lat: latitude, lon: longitude}])})
+		const response = await fetch(`${API_PATH}/api/similar_coord`, {headers: {'Content-Type' : 'application/json'}, method: "POST", body: JSON.stringify([{lat: latitude, lon: longitude}])})
 		const data = await response.json();
 		const nearCluster = data.find(cluster => cluster.score > 0.8);
 		if (nearCluster === undefined )
