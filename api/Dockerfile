@@ -26,7 +26,6 @@ RUN apt-get update && \
     postgresql-client-12
 
 RUN docker-php-ext-install -j$(nproc) intl gd bcmath zip pdo_pgsql pgsql sockets xsl soap opcache
-# RUN pecl install https://github.com/0x450x6c/php-amqp/raw/7323b3c9cc2bcb8343de9bb3c2f31f6efbc8894b/amqp-1.10.3.tgz
 
 RUN echo 'memory_limit = 1024M' >> /usr/local/etc/php/conf.d/docker-php-memlimit.ini;
 
