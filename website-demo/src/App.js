@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { PinDrop } from '@material-ui/icons';
 import {mapStyles, snap} from "./helper";
 import * as moment from "moment";
+import { useToasts } from 'react-toast-notifications';
 
 function App() {
 	const { isLoaded } = useJsApiLoader({id: 'google-map-script', googleMapsApiKey: "AIzaSyB0RQ7Buz5dpvv51Z8M8x1BS4KipinEojo"})
@@ -18,7 +19,9 @@ function App() {
 	const [clusters, setClusters] = useState([]);
 	const [clustersVisible, setClustersVisible] = useState(false);
 
+	const [loading, setLoading] = useState(false);
 	const [manualMode, setManualMode] = useState(false);
+	const { addToast } = useToasts();
 
 	/**
 	 *  Инициализация карты + зум
@@ -119,12 +122,12 @@ function App() {
 		const nearCluster = data.find(cluster => cluster.score > 0.8);
 		if (nearCluster === undefined )
 		{
-			alert('Нет предыдущих маршрутов в округе. Замер раз в 2 минуты');
+			addToast('Нет предыдущих маршрутов в округе. Замер раз в 2 минуты', { appearance: 'info' })
 		}
 		else
 		{
 			console.log(nearCluster);
-			alert('Рядом найден предыдущий маршрут. Увеличиваем интервал замеров до 3 минут');
+			addToast('Рядом найден предыдущий маршрут. Увеличиваем интервал замеров до 3 минут', { appearance: 'success' });
 		}
 	}
 
@@ -153,6 +156,7 @@ function App() {
 	 **/
 	function selectTrack (trackId)
 	{
+		setSnappedRoute(false);
 		const track = routes.find(_ => +_.id === +trackId);
 
 		setSelectedRoute(selectedRoute?.id === track?.id ? null : track);
@@ -208,9 +212,9 @@ function App() {
 							</option>
 						))}
 					</select>
-					<button style={{marginRight: 10, whiteSpace: 'nowrap'}} disabled={!selectedRoute} onClick={() => snap(selectedRoute, snapMode, setVisibleRoutes, setSnappedRoute)} className={`ml-2 btn btn-sm  btn-primary`}>
+					<button style={{marginRight: 10, whiteSpace: 'nowrap'}} disabled={!selectedRoute || loading} onClick={() => snap(selectedRoute, snapMode, setVisibleRoutes, setSnappedRoute, setLoading, addToast)} className={`ml-2 btn btn-sm  btn-primary`}>
 						<svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000"><g><rect fill="none" height="24" width="24"/><path d="M9.78,11.16l-1.42,1.42c-0.68-0.69-1.34-1.58-1.79-2.94l1.94-0.49C8.83,10.04,9.28,10.65,9.78,11.16z M11,6L7,2L3,6h3.02 C6.04,6.81,6.1,7.54,6.21,8.17l1.94-0.49C8.08,7.2,8.03,6.63,8.02,6H11z M21,6l-4-4l-4,4h2.99c-0.1,3.68-1.28,4.75-2.54,5.88 c-0.5,0.44-1.01,0.92-1.45,1.55c-0.34-0.49-0.73-0.88-1.13-1.24L9.46,13.6C10.39,14.45,11,15.14,11,17c0,0,0,0,0,0h0v5h2v-5 c0,0,0,0,0,0c0-2.02,0.71-2.66,1.79-3.63c1.38-1.24,3.08-2.78,3.2-7.37H21z"/></g></svg>
-						Уточнить маршрут
+						{loading ? 'Уточняем....' : 'Уточнить маршрут'}
 					</button>
 
 					<select style={{marginRight: 10, width: 200}} className="form-control form-control-sm d-inline-block" onChange={(e) => setSnapMode(e.target.value)}>
@@ -272,17 +276,17 @@ function App() {
 
 			{
 				selectedRoute?.img &&
-					<div style={{width: 350, position: 'absolute', left: 0, bottom: 0, backgroundColor: "#fff"}}>
+					<div style={{width: 300, position: 'absolute', left: 0, bottom: 0, backgroundColor: "#fff"}}>
 						{
 							snappedRoute && selectedRoute?.batteryPercent &&
 							<div className="d-flex text-center p-2">
 								<div>
-									<h3 className="text-success">на {selectedRoute?.batteryPercent}%</h3>
-									<div className="small text-muted">меньше расхода батареи относительно Kinbery</div>
+									<h4 className="text-success">на {selectedRoute?.batteryPercent}%</h4>
+									<div style={{fontSize: 10}} className="small text-muted">меньше расхода батареи в background </div>
 								</div>
 								<div>
-									<h3 className="text-success">на {selectedRoute?.precisionPercent}%</h3>
-									<div className="small text-muted">выше точность построения маршрута относительно Kinbery</div>
+									<h4 className="text-success">на {selectedRoute?.precisionPercent}%</h4>
+									<div style={{fontSize: 10}} className="small text-muted">выше точность построения маршрута относительно Kinbery</div>
 								</div>
 							</div>
 						}
