@@ -55,7 +55,7 @@ function App() {
 
 			if (!selectedRoute)
 			{
-				setSelectedRoute(paths[0]);
+				setSelectedRoute(paths[1]);
 			}
 			else
 			{
