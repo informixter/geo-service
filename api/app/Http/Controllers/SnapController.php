@@ -78,4 +78,22 @@ class SnapController extends Controller
         $res = json_decode($response->getBody()->getContents(), true);
         return response()->json($res);
     }
+
+    /**
+     * Получение координат кластера
+     *
+     * @param Request $request
+     * @return JsonResponse
+     * @throws GuzzleException
+     */
+    public function similar_center(Request $request)
+    {
+        $end_point = env('SIMILAR_SERVER', "http://calc:5000");
+        $client = new Client();
+        $id = $request->route('id', 0);
+        $n_cl = 15;
+        $response = $client->get($end_point . "/centers?n_cl=" . $n_cl);
+        $res = json_decode($response->getBody()->getContents(), true);
+        return response()->json($res);
+    }
 }

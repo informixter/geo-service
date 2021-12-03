@@ -107,9 +107,48 @@ def calc(n_clusters, id):
 
 print(calc(15, 3123123122131232300))
 
+
 @app.route("/")
 def get_calc():
-    id = request.args.get('id', default = 0, type = int)
-    n_cl = request.args.get('n_cl', default = 15, type = int)
+    id = request.args.get('id', default=0, type=int)
+    n_cl = request.args.get('n_cl', default=15, type=int)
     return jsonify(calc(n_cl, id))
 
+
+@app.route("/similar_coords")
+def similar_coords():
+    id = request.args.get('id', default=0, type=int)
+    n_cl = request.args.get('n_cl', default=15, type=int)
+    return jsonify(calc(n_cl, id))
+
+
+@app.route("/centers")
+def centers():
+    n_clusters = request.args.get('n_cl', default=15, type=int)
+    df_sql = pd.read_sql("select id, name,data from routes;", engine)
+    coords = []
+    for i, row in df_sql.iterrows():
+        for p in row['data']['points']:
+            coords.append({"lat": p['coords']['latitude'], "lon": p['coords']['longitude']})
+
+    if len(coords) < n_clusters:
+        n_clusters = len(coords)
+
+    df = pd.DataFrame(coords, columns=['lon', 'lat'])
+    geometry = [Point(xy) for xy in zip(df.lon, df.lat)]
+
+    gdf = gp.GeoDataFrame(df, geometry=geometry)
+
+    a = pd.Series(gdf['geometry'].apply(lambda p: p.x))
+    b = pd.Series(gdf['geometry'].apply(lambda p: p.y))
+    X = np.column_stack((a, b))
+
+    kmeans = KMeans(n_clusters=n_clusters, init='k-means++', random_state=5, max_iter=400)
+    y_kmeans = kmeans.fit_predict(X)
+    k = pd.DataFrame(y_kmeans, columns=['cluster'])
+    gdf = gdf.join(k)
+    ret = []
+    for i, row in enumerate(kmeans.cluster_centers_):
+        ret.append({"lat": row[1], "lon": row[0], "number": i})
+
+    return jsonify(ret)
