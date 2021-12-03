@@ -158,10 +158,14 @@ function App() {
 	 **/
 	function selectTrack (trackId)
 	{
-		setSnappedRoute(false);
 		const track = routes.find(_ => +_.id === +trackId);
 
 		setSelectedRoute(selectedRoute?.id === track?.id ? null : track);
+
+		if (track)
+		{
+			setSnappedRoute(false);
+		}
 
 		if ((track?.points || []).length > 0)
 		{
