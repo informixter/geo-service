@@ -115,8 +115,10 @@ export function lookup (route, pointsCount = 2, maxDistance = 75)
 /**
  * прикрепление маршрута к дорогам и пешим маршрутам (map snapping)
  */
-export async function snap (path, snapMode, setVisibleRoutes, setSnappedRoute, )
+export async function snap (path, snapMode, setVisibleRoutes, setSnappedRoute, setLoading, addToast)
 {
+	addToast('Уточняем маршрут, ждите...', { appearance: 'info' });
+	setLoading(true);
 	let groups = [];
 	let points = [...path.points];
 	let startPoints = [];
@@ -182,5 +184,7 @@ export async function snap (path, snapMode, setVisibleRoutes, setSnappedRoute, )
 	lookup(snappedRoute, 3);
 	lookup(snappedRoute, 2, 100);
 
+	addToast('Маршрут уточнён', { appearance: 'success' });
 	setSnappedRoute(snappedRoute);
+	setLoading(false);
 }
