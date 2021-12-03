@@ -5,6 +5,8 @@ services:
     build:
       context: ./website-demo
       dockerfile: Dockerfile
+      args:
+        REACT_APP_GEO_PATH: 'http://localhost:8080'
     ports:
       - "80:80"
     networks:

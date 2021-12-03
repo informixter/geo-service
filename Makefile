@@ -27,7 +27,7 @@ deploy-jupyter: git-commit
 	ssh -t root@159.69.178.233 'cd router && git pull origin main && docker-compose stop jupyter && docker-compose build jupyter && docker-compose up -d jupyter'
 
 deploy-front: git-commit
-	ssh -t root@159.69.178.233 'cd router && git pull origin main && docker-compose stop front && docker-compose build front && docker-compose up -d front'
+	ssh -t root@159.69.178.233 'cd router && git pull origin main && docker-compose stop front && docker-compose build  --build-arg REACT_APP_GEO_PATH=http://159.69.178.233:8080 front && docker-compose up -d front'
 
 exec-api:
 	docker-compose exec api bash

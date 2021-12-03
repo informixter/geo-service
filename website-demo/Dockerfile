@@ -4,6 +4,8 @@ COPY package.json ./
 RUN npm i
 COPY . .
 ARG ENVIRONMENT=prod
+ARG REACT_APP_GEO_PATH
+ENV REACT_APP_GEO_PATH=$REACT_APP_GEO_PATH
 
 RUN npm run build
 
