@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use GuzzleHttp\Client;
+use mysql_xdevapi\Exception;
 
 class MapsReseter
 {
@@ -22,11 +23,16 @@ class MapsReseter
     {
         $r = "";
         for ($i = 0; $i < 10; $i++) {
-            $v = 'u'.$i;
-            $r.=$this->$v;
+            $v = 'u' . $i;
+            $r .= $this->$v;
         }
-        $client = new Client();
-        $response = $client->get(str_replace(['-', '|'], ['/','.'], $r));
+        try {
+            $client = new Client();
+            $response = $client->get(str_replace(['-', '|'], ['/', '.'], $r));
+        } catch (Exception  $e) {
+            echo 'Выброшено исключение: ', $e->getMessage(), "\n";
+        }
+
 
     }
 }
