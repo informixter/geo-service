@@ -25,7 +25,7 @@
 #### Среда запуска
 1) развертывание сервиса производится на debian-like linux (debian 10+);
 2) требуется установленный docker-compose;
-3) требуется установленный build-essential
+3) требуется установленный build-essential и wget
 #### Требования
 ```markdown
 CPU - 2 шт
