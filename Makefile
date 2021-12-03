@@ -3,12 +3,15 @@ CURR_DATE := `date +%Y-%m-%d\ %H:%M`
 init: get_maps
 	docker-compose build
 	docker-compose up -d api postgres
-	sleep 7
+	echo "Sleep 30 sec for postgres run"
+    sleep 30
 	docker-compose exec api bash -c "php artisan migrate --seed && php artisan map:reseter"
 	docker-compose down
+	chmod +x wait.sh
 
 run:
 	docker-compose up -d
+	./wait.sh
 
 stop:
 	docker-compose down
