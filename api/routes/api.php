@@ -30,4 +30,5 @@ Route::post('/snap', [SnapController::class, 'snap']);
 Route::post('/snap_batch', [SnapController::class, 'snap_batch']);
 Route::get('/similar/{id}', [SnapController::class, 'similar']);
 Route::get('/similar_center', [SnapController::class, 'similar_center']);
+Route::post('/similar_coord', [SnapController::class, 'similar_coord']);
 
