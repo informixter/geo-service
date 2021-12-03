@@ -173,7 +173,7 @@ export async function snap (path, snapMode, setVisibleRoutes, setSnappedRoute, )
 		points : []
 	};
 
-	setVisibleRoutes([]);
+	//setVisibleRoutes([]);
 
 	for await (let group of groups)
 	{
