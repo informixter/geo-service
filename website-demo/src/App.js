@@ -2,7 +2,7 @@ import {GoogleMap, Marker, Polyline, useJsApiLoader} from '@react-google-maps/ap
 import React, {useCallback, useEffect, useState} from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { PinDrop } from '@material-ui/icons';
-import {calcDistance, mapStyles, polygonCenter, snap} from "./helper";
+import {mapStyles, snap} from "./helper";
 import * as moment from "moment";
 
 function App() {
@@ -18,6 +18,9 @@ function App() {
 	const urlSearchParams = new URLSearchParams(window.location.search);
 	const params = Object.fromEntries(urlSearchParams.entries());
 
+	/**
+	 *  Инициализация карты + зум
+	 * */
 	const onLoad = useCallback(function callback(map) {
 		const bounds = new window.google.maps.LatLngBounds();
 		map.fitBounds(bounds);
@@ -25,6 +28,9 @@ function App() {
 		setTimeout(() => map.setZoom(17), 500);
 	}, [])
 
+	/**
+	 * Получение сохраненных на сервере роутов
+	 * */
 	useEffect(() =>
 	{
 		(async () =>
@@ -32,10 +38,6 @@ function App() {
 			const response = await fetch('https://api.smartarget.online/geo/data');
 			const data = await response.json();
 			let paths = data.data.sort((a, b) => a.name > b.name ? 1 : -1);
-			cluster(paths);
-			cluster(paths);
-			cluster(paths);
-			getOptimized(paths);
 
 			setData(paths);
 
@@ -55,77 +57,17 @@ function App() {
 
 	}, []);
 
-	function cluster (paths)
+	/**
+	 * Сохранение роутов на сервере
+	 */
+	function saveRoutes ()
 	{
-		paths.filter(path => path.name.match('cluster')).forEach(path =>
-		{
-			const newPoints = [];
-			path.points.forEach((point, i) =>
-			{
-				newPoints.push(point);
 
-				if (i >= path.points.length - 1)
-				{
-					return;
-				}
-
-				const center = polygonCenter([point, path.points[i + 1]]);
-				newPoints.push({...point, coords: {...point.coords, ...center}});
-			});
-
-			path.points = newPoints;
-		});
 	}
 
-	function getOptimized (paths)
-	{
-		const optimizedPath = {
-			id: 21312312,
-			name: 'optimized',
-			color: 'red',
-			points: []
-		};
-
-		const clusterPaths = paths.filter(path => path.name.match('cluster')).sort((a, b) => a.points.length > b.points.length ? -1 : 1);
-		const longestPath = clusterPaths[0];
-		const shortClusterPaths = clusterPaths.slice(1);
-
-		while (shortClusterPaths.length > 0)
-		{
-			let shortPath = shortClusterPaths.pop();
-			longestPath.points.forEach((point, i) =>
-			{
-				let shortPathPointToSnap = null;
-				let shortestDistance = 1000000;
-				shortPath.points.filter(shortPathPoint => calcDistance(point, shortPathPoint) < 5)
-				.forEach(p =>
-				{
-					const d = calcDistance(point, p);
-					if (d < shortestDistance)
-					{
-						shortPathPointToSnap = p;
-						shortestDistance = d;
-					}
-				});
-
-				if (!shortPathPointToSnap)
-				{
-					return;
-				}
-
-				const center = polygonCenter([point, shortPathPointToSnap]);
-				optimizedPath.points.push({...point, coords: {...point.coords, ...center}, timestamp: i});
-			}, []);
-		}
-
-		paths.push(optimizedPath);
-	}
-
-	function getTitle (timestamp)
-	{
-		return moment(timestamp).format("HH:mm:ss");
-	}
-
+	/**
+	 * Обработка кликов на карту при построении маргрута вручную
+	 */
 	function onClick (e)
 	{
 		if (!selectedData || !params.mode)
@@ -183,6 +125,9 @@ function App() {
 		return visibleRoutes.find(_ => _.id === route?.id) !== undefined;
 	}
 
+	/**
+	 * Закрепление / открепление маршрута на карте
+	 */
 	function toggleVisibleRoute (route)
 	{
 		if (!isRouteVisible(route))
@@ -195,6 +140,9 @@ function App() {
 		}
 	}
 
+	/**
+	 * Выбор маршрута для отображения
+	 **/
 	function selectTrack (trackId)
 	{
 		const track = data.find(_ => +_.id === +trackId);

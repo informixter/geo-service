@@ -1,7 +1,7 @@
 import * as moment from "moment";
 
 /**
- * стили карты для пщщпду ьфзы
+ * стили карты для google maps
  */
 export const mapStyles = [
 	{
@@ -34,28 +34,7 @@ export const mapStyles = [
 
 
 /**
- * определение геометрического центра между 2мя точками
- */
-export function polygonCenter (points) {
-	const longitudes = points.map((_, i) => _.coords.longitude);
-	const latitudes = points.map((_, i) => _.coords.latitude);
-
-	latitudes.sort();
-	longitudes.sort();
-
-	const lowX = latitudes[0];
-	const highX = latitudes[latitudes.length - 1];
-	const lowy = longitudes[0];
-	const highy = longitudes[latitudes.length - 1];
-
-	const centerX = lowX + ((highX - lowX) / 2);
-	const centerY = lowy + ((highy - lowy) / 2);
-
-	return {latitude: centerX, longitude: centerY};
-}
-
-/**
- * определение расстояния между 2мя точками (в метрах)
+ * определение расстояния между 2мя точками (в метрах) по формуле с учетом изгиба земли
  */
 export function calcDistance (point1, point2)
 {
@@ -93,7 +72,7 @@ export function calcDistance (point1, point2)
 }
 
 /**
- * алгоритм устранения петлей в маршрутах
+ * lookup алгоритм устранения петлей в маршрутах
  */
 export function lookup (route, pointsCount = 2, maxDistance = 75)
 {
@@ -134,7 +113,7 @@ export function lookup (route, pointsCount = 2, maxDistance = 75)
 }
 
 /**
- * прикрепление маршрута к дорогам и пешим маршрутам
+ * прикрепление маршрута к дорогам и пешим маршрутам (map snapping)
  */
 export async function snap (path, snapMode, setVisibleRoutes, setSnappedRoute, )
 {
