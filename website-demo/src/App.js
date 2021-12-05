@@ -9,7 +9,7 @@ import { useToasts } from 'react-toast-notifications';
 const API_PATH = process.env.REACT_APP_GEO_PATH || 'http://159.69.178.233:8080';
 
 function App() {
-	const { isLoaded } = useJsApiLoader({id: 'google-map-script', googleMapsApiKey: "AIzaSyB0RQ7Buz5dpvv51Z8M8x1BS4KipinEojo"})
+	const { isLoaded } = useJsApiLoader({id: 'google-map-script', googleMapsApiKey: "API KEY HERE"})
 
 	const [routes, setRoutes] = useState([]);
 	const [selectedRoute, setSelectedRoute] = useState(null);
